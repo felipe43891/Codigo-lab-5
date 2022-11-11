@@ -1,0 +1,239 @@
+.def temp = r21 ;Se le da un nombre al registro
+start:
+	ldi r16, 0xff ;Se declara el registro con constante de 8 bits
+	out ddrb, r16 ;Se le da direccion de salida al registro por el puerto B
+	out ddrd, r16 ;Se le da direccion de salida al registro por el puerto B
+	out ddrc, r16 ;Se le da direccion de salida al registro por el puerto B
+	out spl, r16
+	ldi r17, 0 ;Se declara el registro
+reset: 
+	lds temp, WDTCSR ;Carga un byte desde el espacio de los datos
+	ori temp, (1<<WDCE) | (1<<WDE) ;Realiza el OR lógico entre el contenido del registro Rd y una constante
+	sts WDTCSR, temp ;Almacena directamente en el espacio de datos
+	ldi temp, (1<<WDE) | (1<<WDP0) | (1<<WDP3)
+	sts WDTCSR, temp
+
+	in r20, pinc ;Carga datos en el registro 20 del pin C
+	cpi r20, 1 ;Se compara el registro si no es 1
+	breq suma ;Salto a etiqueta
+	cpi r17, 0
+	breq ceroe
+	cpi r17, 1
+	breq unoe
+	cpi r17, 2
+	breq dose
+	cpi r17, 3
+	breq trese
+	cpi r17, 4
+	breq cuatroe		
+	cpi r17, 5
+	breq cincoe
+	cpi r17, 6
+	breq seise
+	cpi r17, 7
+	breq sietee
+	cpi r17, 8
+	breq ochoe
+	cpi r17, 9		
+	breq nuevee	
+rjmp start
+suma:
+	wdr ;Watchdog reset
+	in r16, pinc
+	cpi r16, 0	
+	brne suma	
+	inc r17	;Incrementa 
+	rjmp reset
+ceroe:
+	call cero ;Llama a la etiqueta
+	rjmp reset
+unoe:
+	call uno
+	rjmp reset
+dose: 
+	call dos
+	rjmp reset
+trese:
+	call tres
+	rjmp reset
+cuatroe:
+	call cuatro
+	rjmp reset
+cincoe:
+	call cinco
+	rjmp reset
+seise:
+	call seis
+	rjmp reset
+sietee:
+	call siete
+	rjmp reset
+ochoe:
+	call ocho
+	rjmp reset
+nuevee:
+	call nueve
+	rjmp reset
+;r18 = columnas
+;r19 = filas
+cero:
+	ldi r18,33;100001
+	ldi r19,0;000000
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 63;111111
+	ldi r19, 30;011110
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+uno:
+	ldi r18,62;111110
+	ldi r19,31;011111
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 8;001000
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 6;000110
+	ldi r19, 62;111110
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+dos:
+	ldi r18,63;111111
+	ldi r19,22;010110
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 48;110000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 1;000001
+	ldi r19, 7;000111
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+tres:
+	ldi r18,63;111111
+	ldi r19,22;10110
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+cuatro:
+	ldi r18,63;111111
+	ldi r19,55;110111
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 1;000001
+	ldi r19, 48;110000
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+cinco:
+	ldi r18,63;111111
+	ldi r19,22;010110
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 1;000001
+	ldi r19, 48;110000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 7;000111
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+seis:
+	ldi r18,63;111111
+	ldi r19,26;011010
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 1;000001
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 3;000011
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+siete:
+	ldi r18,63;111111
+	ldi r19,62;111110
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+ocho:
+	ldi r18,63;111111
+	ldi r19,26;011010
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 33;100001
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+nueve:
+	ldi r18,63;111111
+	ldi r19,22;010110
+	out portb,r18	
+	out portd,r19
+	call delay
+	ldi r18, 32;100000
+	ldi r19, 0;000000
+	out portb,r18
+	out portd,r19
+	call delay
+	ldi r18, 1;000001
+	ldi r19, 48;110000
+	out portb,r18
+	out portd,r19
+	call delay
+	ret
+DELAY:
+	ldi r30, 160
+	DELAY1:
+		ldi r31, 100
+		DELAY2:	
+			
+			dec r31
+			brne DELAY2
+			dec r30
+			brne DELAY1
+ret
